@@ -91,7 +91,7 @@ class UpdatePriceElasticSearchCommand extends Command
                 $combineNew =  array_combine($itemNameNew, $itemPriceNew);
 
                 $differencePrice = array_diff_assoc($combineOld, $combineNew);
-
+                $a = 0;
 
 //                $filesystem->dumpFile('./tmp/old/items_' . $prefixOffset . '_offset.txt', $items);
 
