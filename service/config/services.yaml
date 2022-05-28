@@ -26,3 +26,4 @@ services:
     App\Console\UpdatePriceElasticSearchCommand:
         calls:
             - setItemsccClient: [ '@App\Client\ItemsccService' ]
+            - setFilesystem: [ '@filesystem' ]

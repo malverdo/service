@@ -6,6 +6,7 @@ use App\Client\ItemsccService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class UpdatePriceElasticSearchCommand extends Command
 {
@@ -15,6 +16,12 @@ class UpdatePriceElasticSearchCommand extends Command
      * @var ItemsccService
      */
     public $itemscc;
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+
 
     protected function configure()
     {
@@ -25,11 +32,25 @@ class UpdatePriceElasticSearchCommand extends Command
 
     public function execute(InputInterface $input, OutputInterface $output): int
     {
+        $i = 0;
+        $client = $this->getItemsccClient();
+        $filesystem = $this->getFilesystem();
+        if (!$filesystem->exists('tmp')) {
 
+            while (true) {
+                $prefixOffset =  $i * 3000;
+                $items = $client->getItemsOffset($i++);
+                if (empty($items)) {
+                    break;
+                } else {
+                    $filesystem->dumpFile('./tmp/old/items_' . $prefixOffset . '_offset.txt', $items);
+                }
+            }
+
+        }
 
 
         $i = 0;
-        $client = $this->getItemsccClient();
 //        do {
 //
 //            $array = $client->getItemsOffset(++$i);
@@ -52,5 +73,15 @@ class UpdatePriceElasticSearchCommand extends Command
     public function getItemsccClient(): ItemsccService
     {
         return $this->itemscc;
+    }
+
+    public function setFilesystem(Filesystem $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
+
+    public function getFilesystem(): Filesystem
+    {
+        return $this->filesystem;
     }
 }
