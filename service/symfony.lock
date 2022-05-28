@@ -1,4 +1,13 @@
 {
+    "elasticsearch/elasticsearch": {
+        "version": "v7.17.0"
+    },
+    "ezimuel/guzzlestreams": {
+        "version": "3.0.1"
+    },
+    "ezimuel/ringphp": {
+        "version": "1.2.0"
+    },
     "psr/cache": {
         "version": "2.0.0"
     },
@@ -10,6 +19,9 @@
     },
     "psr/log": {
         "version": "2.0.0"
+    },
+    "react/promise": {
+        "version": "v2.9.0"
     },
     "symfony/cache": {
         "version": "v5.4.9"
