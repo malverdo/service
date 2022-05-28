@@ -1,0 +1,43 @@
+version: '3'
+services:
+    web:
+        build:
+            context: /docker/dev/nginx
+            dockerfile: Dockerfile
+        ports:
+            - "80:80"
+        volumes:
+            # config nginx
+            - /nginx/${NAMEPROJECT}.conf:/etc/nginx/conf.d/${NAMEPROJECT}.conf
+            # передать папки
+            - /home/${HOMENAME}/${ROOTNAMEPROJECT}/${NAMEPROJECT}:/home/apps/${NAMEPROJECT}
+        depends_on:
+            - service
+    service:
+        build:
+            context: /docker/dev/${NAMEPROJECT}
+            dockerfile: php-fpm.docker
+        # должны совпадать с путями из nginx
+        volumes:
+            - /home/${HOMENAME}/${ROOTNAMEPROJECT}/${NAMEPROJECT}:/home/apps/${NAMEPROJECT}
+        environment:
+            - PHP_IDE_CONFIG=serverName=elasticsearch
+    elasticsearch:
+        build:
+            context: /docker/dev/elasticsearch
+            dockerfile: Dockerfile
+        volumes:
+            - elasticsearch:/usr/share/elasticsearch/data:z
+            - /docker/dev/elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
+        environment:
+            ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+            discovery.type: single-node
+        ports:
+             - "9200:9200"
+        networks:
+            - elastics
+networks:
+    elastics:
+
+volumes:
+    elasticsearchData:
