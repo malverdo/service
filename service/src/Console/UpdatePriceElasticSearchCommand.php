@@ -49,18 +49,19 @@ class UpdatePriceElasticSearchCommand extends Command
         $filesystem = $this->getFilesystem();
         $elasticSearchBuilder = $this->getElasticSearchBuilder();
 
-        $elasticSearchBuilder->createIndexItem();
+        $elasticSearchBuilder->createIndex('item');
+
 
 
         if (!$filesystem->exists('tmp')) {
             while (true) {
-                $prefixOffset =  $i * 3000;
-                $items = $client->getItemsOffset($i++);
+                $offset =  $i++ * 3000;
+                $items = $client->getItemsOffset($offset);
                 if (empty($items)) {
                     break;
                 } else {
-                    $filesystem->dumpFile('./tmp/old/items_' . $prefixOffset . '_offset.txt', $items);
-                    $elasticSearchBuilder->createDocumentItems(unserialize($items));
+                    $filesystem->dumpFile('./tmp/old/items_' . $offset . '_offset.txt', $items);
+                    $elasticSearchBuilder->createDocumentBulk(unserialize($items), 'item');
                 }
             }
 
@@ -69,19 +70,19 @@ class UpdatePriceElasticSearchCommand extends Command
         $i = 0;
 
         while (true) {
-            $prefixOffset =  $i * 3000;
-            $items = $client->getItemsOffset($i++);
+            $offset =  $i++ * 3000;
+            $items = $client->getItemsOffset($offset);
             if (empty($items)) {
                 break;
             } else {
-                $filesystem->dumpFile('./tmp/new/items_' . $prefixOffset . '_offset.txt', $items);
+                $filesystem->dumpFile('./tmp/new/items_' . $offset . '_offset.txt', $items);
             }
-            $oldFile = hash_file('md5', './tmp/old/items_' . $prefixOffset . '_offset.txt');
-            $newFile = hash_file('md5', './tmp/new/items_' . $prefixOffset . '_offset.txt');
+            $oldFile = hash_file('md5', './tmp/old/items_' . $offset . '_offset.txt');
+            $newFile = hash_file('md5', './tmp/new/items_' . $offset . '_offset.txt');
 
             if ($oldFile != $newFile) {
-                $fileOld = unserialize(file('./tmp/old/items_' . $prefixOffset . '_offset.txt')[0]);
-                $fileNew = unserialize(file('./tmp/new/items_' . $prefixOffset . '_offset.txt')[0]);
+                $fileOld = unserialize(file('./tmp/old/items_' . $offset . '_offset.txt')[0]);
+                $fileNew = unserialize(file('./tmp/new/items_' . $offset . '_offset.txt')[0]);
                 $itemPriceOld = array_column($fileOld, 'steam_price_en');
                 $itemNameOld = array_column($fileOld, 'steam_market_hash_name');
                 $itemPriceNew = array_column($fileNew, 'steam_price_en');
@@ -91,6 +92,9 @@ class UpdatePriceElasticSearchCommand extends Command
                 $combineNew =  array_combine($itemNameNew, $itemPriceNew);
 
                 $differencePrice = array_diff_assoc($combineOld, $combineNew);
+                $priceKey = array_keys($differencePrice);
+
+
                 $a = 0;
 
 //                $filesystem->dumpFile('./tmp/old/items_' . $prefixOffset . '_offset.txt', $items);

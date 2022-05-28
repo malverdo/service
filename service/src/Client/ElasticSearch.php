@@ -101,6 +101,17 @@ class ElasticSearch
     }
 
     /**
+     * @param array $params
+     * @throws ClientResponseException
+     * @throws ServerResponseException
+     *
+     */
+    public function addDocumentBulk(array $params)
+    {
+        $this->client->bulk($params);
+    }
+
+    /**
      * @param string $param
      * @return \Elastic\Elasticsearch\Response\Elasticsearch|Promise
      * @throws ClientResponseException

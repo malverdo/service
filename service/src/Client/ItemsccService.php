@@ -15,7 +15,7 @@ class ItemsccService
 
     public function getItemsOffset(int $offset = 0): ?string
     {
-        $offset = $offset * 3000;
+//        $offset = $offset * 3000;
 
         $response = $this->client->request(
             'GET',

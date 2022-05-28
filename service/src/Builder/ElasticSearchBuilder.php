@@ -24,9 +24,9 @@ class ElasticSearchBuilder
      * @throws ClientResponseException
      * @throws MissingParameterException
      */
-    public function createIndexItem()
+    public function createIndex($index)
     {
-        if (!$this->elasticSearch->exists('item')){
+        if (!$this->elasticSearch->exists($index)){
             $params = [
                 'index' => 'item',
                 'body' => [
@@ -73,30 +73,37 @@ class ElasticSearchBuilder
     /**
      * @throws ServerResponseException
      * @throws ClientResponseException
-     * @throws MissingParameterException
      *
      */
-    public function createDocumentItems($items)
+    public function createDocumentBulk($items, $index)
     {
-        foreach ($items as $item) {
+
             $params = [
-                'index' => 'item',
-                'body'  => [
-                    'data' => [
-                        'item' => [
-                            'hash_name' => $item['steam_market_hash_name'],
-                            'value' => [
-                                [
-                                    'date' => date('y-m-d'),
-                                    'price' => $item['steam_price_en'],
-                                ]
+                'index' => $index,
+                'body'  => []
+            ];
+        foreach ($items as $item) {
+            $params['body'][] = [
+                'index' => [
+                    '_index' => $index,
+                ]
+            ];
+
+            $params['body'][] = [
+                'data' => [
+                    'item' => [
+                        'hash_name' => $item['steam_market_hash_name'],
+                        'value' => [
+                            [
+                                'date' => date('y-m-d'),
+                                'price' => $item['steam_price_en'],
                             ]
                         ]
                     ]
                 ]
             ];
-
-            $this->elasticSearch->addDocument($params);
         }
+        $this->elasticSearch->addDocumentBulk($params);
+
     }
 }
