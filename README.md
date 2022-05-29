@@ -62,6 +62,7 @@ REST API  приложение для отслеживания даты изме
   ```sh
   docker-compose up -d
   ```
+* скопировать файл .env на .env.local , указать ELASTIC_HOST = $_SERVER['REMOTE_ADDR']
 * Зайти в котейнер
   ```sh
   docker exec -it dev_service_1 bash
@@ -96,7 +97,7 @@ REST API  приложение для отслеживания даты изме
   ```
 * Выполнить команды
   ```sh
-  cd php bin/console user:updatePrice
+  php bin/console user:updatePrice
   ```
 
 
