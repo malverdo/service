@@ -27,14 +27,8 @@ services:
         calls:
             - setItemsccClient: [ '@App\Client\ItemsccService' ]
             - setFilesystem: [ '@filesystem' ]
-            - setElasticSearchCreate: [ '@App\Create\ElasticSearchCreate' ]
+            - setElasticSearchItemCreate: [ '@App\Create\ElasticSearchItemCreate' ]
+            - setItemRepository: [ '@App\Repository\ItemRepository' ]
+            - setTemporaryFiles: ['%env(TEMPORARY_FILES)%']
 
 
-
-    App\Create\ElasticSearchCreate:
-        arguments:
-            $elasticSearch: '@App\Client\ElasticSearch'
-
-    App\Exception\ExceptionListener:
-        tags:
-            - { name: kernel.event_listener, event: kernel.exception }

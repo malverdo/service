@@ -7,7 +7,7 @@ use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\MissingParameterException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 
-class ElasticSearchCreate
+class ElasticSearchItemCreate
 {
     /**
      * @var ElasticSearch
@@ -28,7 +28,7 @@ class ElasticSearchCreate
     {
         if (!$this->elasticSearch->exists($index)){
             $params = [
-                'index' => 'item',
+                'index' => $index,
                 'body' => [
                     'mappings' => [
                         'properties' => [
@@ -40,6 +40,9 @@ class ElasticSearchCreate
                                         'properties' => [
                                             'name_hash' => [
                                                 'type' => 'keyword'
+                                            ],
+                                            'name' => [
+                                                'type' => 'text'
                                             ],
                                             'internals' => [
                                                 'type' => 'object',
@@ -73,16 +76,46 @@ class ElasticSearchCreate
     /**
      * @throws ServerResponseException
      * @throws ClientResponseException
+     * @throws MissingParameterException
+     *
+     */
+    public function createDocument($item, $index)
+    {
+            $params = [
+                'index' => $index,
+                'body'  => [
+                    'data' => [
+                        'item' => [
+                            'hash_name' => md5($item['steam_market_hash_name']),
+                            'name' => $item['steam_market_hash_name'],
+                            'value' => [
+                                [
+                                    'date' => date('y-m-d'),
+                                    'price' => $item['steam_price_en'],
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+
+            $this->elasticSearch->addDocument($params);
+
+    }
+
+
+    /**
+     * @throws ServerResponseException
+     * @throws ClientResponseException
      *
      */
     public function createDocumentBulk($items, $index)
     {
-
-            $params = [
-                'index' => $index,
-                'body'  => []
-            ];
-        foreach ($items as $item) {
+        $params = [
+            'index' => $index,
+            'body' => []
+        ];
+        foreach ($items as $key => $item) {
             $params['body'][] = [
                 'index' => [
                     '_index' => $index,
@@ -91,12 +124,51 @@ class ElasticSearchCreate
 
             $params['body'][] = [
                 'data' => [
-                    'item' => [
-                        'hash_name' => $item['steam_market_hash_name'],
+                    $index => [
+                        'hash_name' => md5($item['steam_market_hash_name'] ?? $key),
+                        'name' => $item['steam_market_hash_name'] ?? $key,
                         'value' => [
-                            [
+                            time() => [
                                 'date' => date('y-m-d'),
-                                'price' => $item['steam_price_en'],
+                                'price' => $item['steam_price_en'] ?? $item,
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+        }
+        $this->elasticSearch->addDocumentBulk($params);
+
+    }
+
+    /**
+     * @throws ServerResponseException
+     * @throws ClientResponseException
+     *
+     */
+    public function updatePriceDocumentBulk($items, $index)
+    {
+        $params = [
+            'index' => $index,
+            'body'  => []
+        ];
+        foreach ($items as $item) {
+            $params['body'][] = [
+                'update' => [
+                    '_index' => $index,
+                    '_id' => $item['id']
+                ]
+            ];
+
+            $params['body'][] = [
+                'doc' => [
+                    'data' => [
+                        'item' => [
+                            'value' => [
+                                  time() =>[
+                                       'date' => date('y-m-d'),
+                                       'price' => $item['price'],
+                                   ]
                             ]
                         ]
                     ]

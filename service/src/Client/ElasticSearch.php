@@ -122,4 +122,13 @@ class ElasticSearch
     {
         return $this->client->exists(['id'=> 0, 'index' => $param]);
     }
+
+    /**
+     * @throws ServerResponseException
+     * @throws ClientResponseException
+     */
+    public function search($param)
+    {
+        return $this->client->search($param);
+    }
 }

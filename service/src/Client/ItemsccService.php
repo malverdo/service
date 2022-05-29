@@ -13,9 +13,8 @@ class ItemsccService
         $this->client = $client;
     }
 
-    public function getItemsOffset(int $offset = 0): ?string
+    public function getItemsOffset(int $offset = 0): ?array
     {
-//        $offset = $offset * 3000;
 
         $response = $this->client->request(
             'GET',
@@ -25,7 +24,7 @@ class ItemsccService
         if (empty($response->toArray()['items'])) {
             $return = null;
         } else {
-            $return = serialize($response->toArray()['items']);
+            $return = $response->toArray()['items'];
         }
 
         return $return;
