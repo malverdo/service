@@ -31,4 +31,6 @@ services:
             - setItemRepository: [ '@App\Repository\ItemRepository' ]
             - setTemporaryFiles: ['%env(TEMPORARY_FILES)%']
 
-
+    App\Client\ItemsccService:
+        calls:
+            - setToken: ['%env(TOKEN_ITEMSCC)%']
