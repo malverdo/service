@@ -18,17 +18,6 @@ class ElasticSearch
      */
     private $client;
 
-    /**
-     * @todo перенсти в секрет
-     * @var string
-     */
-    private $host = '172.18.0.1';
-
-    /**
-     *  @todo перенсти в секрет
-     * @var string
-     */
-    private $port = '9200';
 
     /**
      * @return Client
@@ -42,9 +31,9 @@ class ElasticSearch
      * @throws AuthenticationException
      *
      */
-    public function __construct()
+    public function __construct($host, $port)
     {
-        $address = $this->createAddress($this->getHost(), $this->getPort());
+        $address = $this->createAddress($host, $port);
         $this->client = ClientBuilder::create()
             ->setHttpClient(new \GuzzleHttp\Client)
             ->setSSLVerification(false)
@@ -62,22 +51,7 @@ class ElasticSearch
         return sprintf('%s:%s', $host, $port);
     }
 
-    /**
-     * @return string
-     */
-    public function getHost(): string
-    {
-        return $this->host;
-    }
 
-
-    /**
-     * @return string
-     */
-    public function getPort(): string
-    {
-        return $this->port;
-    }
 
     /**
      * @param array $params

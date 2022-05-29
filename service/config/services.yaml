@@ -35,3 +35,8 @@ services:
         calls:
             - setToken: ['%env(TOKEN_ITEMSCC)%']
 
+    App\Client\ElasticSearch:
+        arguments:
+            $host: '%env(ELASTIC_HOST)%'
+            $port: '%env(ELASTIC_PORT)%'
+
