@@ -5,6 +5,8 @@ namespace App\Controller;
 
 
 use App\Repository\ItemRepository;
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,6 +23,10 @@ class ItemController extends AbstractController
         $this->itemRepository = $itemRepository;
     }
 
+    /**
+     * @throws ServerResponseException
+     * @throws ClientResponseException
+     */
     public function search(Request $request, $item): JsonResponse
     {
         $gte = !empty($request->query->get('gte')) ? strtotime($request->query->get('gte')) : 1;
@@ -29,7 +35,7 @@ class ItemController extends AbstractController
         $item = $this->itemRepository->termOne(md5($item));
 
         /**
-         * @todo оптимизировать
+         * @todo оптимизировать array_slice
          */
         foreach ($item['value'] as $key => $value) {
             if ($gte <= $key && $lte <= $key) {
