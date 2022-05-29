@@ -70,9 +70,13 @@ REST API  приложение для отслеживания даты изме
   ```sh
   su apps
   ```
-* Выполнить команды
+* перейти
   ```sh
   cd ~/service/
+  ```
+* Выполнить команды
+  ```sh
+  composer install
   ```
 
 <a name="console"></a>
