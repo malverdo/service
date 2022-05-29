@@ -32,7 +32,7 @@ class ItemController extends AbstractController
          * @todo оптимизировать
          */
         foreach ($item['value'] as $key => $value) {
-            if ($gte <= $key && $lte >= $key) {
+            if ($gte <= $key && $lte <= $key) {
                 $items[] = $value;
             }
         }

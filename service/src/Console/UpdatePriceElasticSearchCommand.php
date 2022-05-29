@@ -51,6 +51,10 @@ class UpdatePriceElasticSearchCommand extends Command
         $start = microtime(true);
         $this->builderService();
 
+        /**
+         * 3м 1млн api
+         * 42c 1млн random
+         */
         $this->createElasticIndexDirectoryFile();
 
         $this->updateElasticIndexDirectoryFile();
@@ -147,12 +151,7 @@ class UpdatePriceElasticSearchCommand extends Command
         while (true) {
             $offset =  $i++ * $this::OFFSET;
             $items = $this->itemscc->getItemsOffset($offset);
-//            if (!$this->saveFileOffset($items, $offset, 'new')) {
-//                break;
-//            }
-
-
-            if ($i == 4) {
+            if (!$this->saveFileOffset($items, $offset, 'new')) {
                 break;
             }
 
