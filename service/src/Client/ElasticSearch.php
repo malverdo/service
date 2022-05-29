@@ -19,11 +19,13 @@ class ElasticSearch
     private $client;
 
     /**
+     * @todo перенсти в секрет
      * @var string
      */
     private $host = '172.18.0.1';
 
     /**
+     *  @todo перенсти в секрет
      * @var string
      */
     private $port = '9200';

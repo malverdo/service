@@ -34,3 +34,4 @@ services:
     App\Client\ItemsccService:
         calls:
             - setToken: ['%env(TOKEN_ITEMSCC)%']
+

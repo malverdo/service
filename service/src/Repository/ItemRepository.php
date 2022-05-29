@@ -39,4 +39,26 @@ class ItemRepository
         return $this->elasticSearch->search($params);
     }
 
+    /**
+     * @throws ServerResponseException
+     * @throws ClientResponseException
+     */
+    public function termOne(string $term, string $index = 'item', string $path = 'data.item.hash_name' )
+    {
+        $params = [
+            'index' => $index,
+            'body' => [
+                'query' => [
+                    'term' => [
+                        $path => $term
+                    ]
+                ]
+            ]
+        ];
+
+        $item = $this->elasticSearch->search($params);
+
+        return $item['hits']['hits'][0]['_source']['data']['item'];
+    }
+
 }
