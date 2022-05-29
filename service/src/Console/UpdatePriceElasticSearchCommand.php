@@ -2,7 +2,7 @@
 namespace App\Console;
 
 
-use App\Builder\ElasticSearchBuilder;
+use App\Create\ElasticSearchCreate;
 use App\Client\ItemsccService;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\MissingParameterException;
@@ -25,7 +25,7 @@ class UpdatePriceElasticSearchCommand extends Command
      */
     private $filesystem;
     /**
-     * @var ElasticSearchBuilder
+     * @var ElasticSearchCreate
      */
     private $elasticSearchBuilder;
 
@@ -47,7 +47,7 @@ class UpdatePriceElasticSearchCommand extends Command
         $i = 0;
         $client = $this->getItemsccClient();
         $filesystem = $this->getFilesystem();
-        $elasticSearchBuilder = $this->getElasticSearchBuilder();
+        $elasticSearchBuilder = $this->getElasticSearchCreate();
 
         $elasticSearchBuilder->createIndex('item');
 
@@ -133,12 +133,12 @@ class UpdatePriceElasticSearchCommand extends Command
         return $this->filesystem;
     }
 
-    public function setElasticSearchBuilder(ElasticSearchBuilder $elasticSearchBuilder)
+    public function setElasticSearchCreate(ElasticSearchCreate $elasticSearchBuilder)
     {
         $this->elasticSearchBuilder = $elasticSearchBuilder;
     }
 
-    public function getElasticSearchBuilder(): ElasticSearchBuilder
+    public function getElasticSearchCreate(): ElasticSearchCreate
     {
         return $this->elasticSearchBuilder;
     }

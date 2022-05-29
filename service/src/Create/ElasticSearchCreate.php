@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Builder;
+namespace App\Create;
 
 use App\Client\ElasticSearch;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\MissingParameterException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 
-class ElasticSearchBuilder
+class ElasticSearchCreate
 {
     /**
      * @var ElasticSearch

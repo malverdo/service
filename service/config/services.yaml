@@ -27,9 +27,11 @@ services:
         calls:
             - setItemsccClient: [ '@App\Client\ItemsccService' ]
             - setFilesystem: [ '@filesystem' ]
-            - setElasticSearchBuilder: [ '@App\Builder\ElasticSearchBuilder' ]
+            - setElasticSearchCreate: [ '@App\Create\ElasticSearchCreate' ]
 
-    App\Builder\ElasticSearchBuilder:
+
+
+    App\Create\ElasticSearchCreate:
         arguments:
             $elasticSearch: '@App\Client\ElasticSearch'
 
