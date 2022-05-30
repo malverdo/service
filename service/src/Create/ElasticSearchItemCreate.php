@@ -74,39 +74,6 @@ class ElasticSearchItemCreate
     }
 
     /**
-     * @throws ServerResponseException
-     * @throws ClientResponseException
-     * @throws MissingParameterException
-     *
-     */
-    public function createDocument($item, $index)
-    {
-            $params = [
-                'index' => $index,
-                'body'  => [
-                    'data' => [
-                        'item' => [
-                            'hash_name' => md5($item['steam_market_hash_name']),
-                            'name' => $item['steam_market_hash_name'],
-                            'value' => [
-                                [
-                                    'date' => date('y-m-d'),
-                                    'price' => $item['steam_price_en'],
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ];
-
-            $this->elasticSearch->addDocument($params);
-
-    }
-
-
-    /**
-     * @throws ServerResponseException
-     * @throws ClientResponseException
      *
      */
     public function createDocumentBulk($items, $index)
@@ -142,8 +109,6 @@ class ElasticSearchItemCreate
     }
 
     /**
-     * @throws ServerResponseException
-     * @throws ClientResponseException
      *
      */
     public function updatePriceDocumentBulk($items, $index)

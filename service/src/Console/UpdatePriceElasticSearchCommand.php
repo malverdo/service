@@ -132,17 +132,24 @@ class UpdatePriceElasticSearchCommand extends Command
     public function createElasticIndexDirectoryFile()
     {
         if (!$this->filesystem->exists('tmp')) {
-            $i = 0;
-            while (true) {
-                $offset =  $i++ * $this::OFFSET;
-                $items = $this->itemscc->getItemsOffset($offset);
-                if (!$this->saveFileOffset($items, $offset, 'old')) {
-                    break;
-                }
+            try {
                 $this->elasticSearchItemCreate->createIndex('item');
-                $this->elasticSearchItemCreate->createDocumentBulk($items, 'item');
+                $i = 0;
+                while (true) {
+                    $offset =  $i++ * $this::OFFSET;
+                    $items = $this->itemscc->getItemsOffset($offset);
+                    if (!$this->saveFileOffset($items, $offset, 'old')) {
+                        break;
+                    }
+                    $this->elasticSearchItemCreate->createDocumentBulk($items, 'item');
+
+                }
+            } catch (\Exception $e) {
+                exit($e->getMessage() . PHP_EOL);
             }
+
         }
+
     }
 
     public function updateElasticIndexDirectoryFile()
