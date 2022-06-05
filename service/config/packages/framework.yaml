@@ -16,6 +16,10 @@ framework:
     #fragments: true
     php_errors:
         log: true
+#    messenger:
+#        routing:
+#            # Route your messages to the transports
+#            'App\Message\SmsNotification': amqp
 
 when@test:
     framework:
