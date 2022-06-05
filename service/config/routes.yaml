@@ -1,3 +1,7 @@
 name_hash:
     path: /item/{item}
     controller: App\Controller\ItemController::search
+
+test:
+    path: /test
+    controller: App\Controller\DefaultController::index
