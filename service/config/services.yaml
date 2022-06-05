@@ -39,4 +39,12 @@ services:
         arguments:
             $host: '%env(ELASTIC_HOST)%'
             $port: '%env(ELASTIC_PORT)%'
+#
+#    App\Controller\DefaultController:
+#        arguments:
+#            $bus: 'messenger.default_bus'
 
+    message_handlers:
+        namespace: App\MessageHandler\
+        resource: '../src/MessageHandler'
+        tags: [ 'messenger.message_handler' ]
