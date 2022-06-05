@@ -20,7 +20,7 @@ REST API  приложение для отслеживания даты изме
 
 
 <a name="search"></a>
-#### Создание автора
+#### Поиск определённого товара
 * **Описание:** Поиск определённого товара  <br>
   **Метод:** GET <br>
   **Адрес:**
@@ -62,7 +62,7 @@ REST API  приложение для отслеживания даты изме
   ```sh
   docker-compose up -d
   ```
-* скопировать файл .env на .env.local , указать ELASTIC_HOST = $_SERVER['REMOTE_ADDR']
+* скопировать файл .env на .env.local , указать ELASTIC_HOST = $_SERVER['REMOTE_ADDR'] - phpinfo()
 * Зайти в котейнер
   ```sh
   docker exec -it dev_service_1 bash
@@ -127,7 +127,7 @@ REST API  приложение для отслеживания даты изме
 Elastic <br>
 * host
   ```sh
-  172.17.0.1
+  localhost
   ```
 * port
   ```sh
