@@ -17,5 +17,5 @@ framework:
             amqp3:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%messages1'
         routing:
-            'App\Message\SmsNotification': amqp
+            'App\Message\SmsNotification': amqp2
             # 'App\Message\YourMessage': async
