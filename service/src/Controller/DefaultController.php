@@ -13,7 +13,7 @@ class DefaultController extends AbstractController
 {
 
 
-    public function index(MessageBusInterface $bus)
+    public function index(MessageBusInterface $bus): JsonResponse
     {
         // will cause the SmsNotificationHandler to be called
         $bus->dispatch(new SmsNotification('Look! I creasdated a message!'));
